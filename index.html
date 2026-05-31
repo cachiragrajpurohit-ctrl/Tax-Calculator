@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator (A.Y. 2026-27) | CA Chirag Rajpurohit</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Calculate and compare your income tax liability under the Old vs. New Tax Regime for Assessment Year 2026-27 (Financial Year 2025-26) with CA Chirag Rajpurohit's interactive calculator.">
+  <meta name="author" content="CA Chirag Rajpurohit">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    h1, h2, h3, h4, .heading-font {
+      font-family: 'Outfit', sans-serif;
+    }
+    /* Custom Scrollbar for form and dashboard */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    /* Active tab style */
+    .tab-active {
+      border-color: #4f46e5;
+      color: #4f46e5;
+      background-color: #f5f3ff;
+    }
+    /* Form sections transition */
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Printable Report styles */
+    #print-area {
+      display: none;
+    }
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11px !important;
+      }
+      /* Hide regular screen elements */
+      header, main, footer, #tax-modal, .no-print, button, select, input {
+        display: none !important;
+      }
+      /* Show the print area */
+      #print-area {
+        display: block !important;
+      }
+      /* Ensure text is dark and clear */
+      .print-bold {
+        font-weight: 700 !important;
+      }
+      .print-border {
+        border: 1px solid #94a3b8 !important;
+      }
+      .print-bg {
+        background-color: #f1f5f9 !important;
+      }
+      .print-title {
+        font-size: 16px !important;
+        font-weight: bold !important;
+      }
+      .print-subtitle {
+        font-size: 12px !important;
+      }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Header Section -->
+  <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="bg-indigo-600 p-2 rounded-lg text-white shadow-inner">
+            <i data-lucide="calculator" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight heading-font">
+              Income Tax Calculator <span class="text-indigo-400 text-lg md:text-xl font-semibold">(A.Y. 2026-27)</span>
+            </h1>
+            <p class="text-xs text-slate-400 tracking-wider uppercase mt-0.5">Financial Year 2025-26 | Government of India</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 bg-white/10 px-4 py-2.5 rounded-xl border border-white/10 backdrop-blur-sm self-start md:self-auto">
+        <i data-lucide="user-check" class="text-indigo-300 w-5 h-5"></i>
+        <div class="text-left">
+          <span class="block text-[10px] text-indigo-300 font-bold uppercase tracking-widest">Tax Advisory Service</span>
+          <span class="block text-sm font-semibold heading-font text-white">Created by: CA Chirag Rajpurohit</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+    
+    <!-- Action Bar (Reset) -->
+    <div class="mb-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+      <div class="flex items-start gap-3">
+        <div class="bg-indigo-100 text-indigo-800 p-2 rounded-xl mt-0.5">
+          <i data-lucide="info" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="font-semibold text-slate-800 text-sm">Interactive Tax Computation</h4>
+          <p class="text-xs text-slate-500">Provide details across tabs to calculate liabilities. Standard calculations apply in real-time.</p>
+        </div>
+      </div>
+      <div>
+        <button onclick="resetInputs()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 hover:border-rose-300 rounded-xl text-xs font-semibold text-rose-700 transition flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Reset Calculator
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Layout Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Column: Form & Inputs (Tabs Structure) -->
+      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <!-- Tabs Selector -->
+        <div class="flex overflow-x-auto border-b border-slate-200 bg-slate-50/50 p-1 gap-1">
+          <button onclick="switchTab('tab-general')" id="btn-tab-general" class="tab-active flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150">
+            <i data-lucide="user" class="w-4 h-4"></i> Profile Details
+          </button>
+          <button onclick="switchTab('tab-salary')" id="btn-tab-salary" class="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600">
+            <i data-lucide="wallet" class="w-4 h-4"></i> Salary
+          </button>
+          <button onclick="switchTab('tab-hp')" id="btn-tab-hp" class="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600">
+            <i data-lucide="home" class="w-4 h-4"></i> House Property
+          </button>
+          <button onclick="switchTab('tab-business')" id="btn-tab-business" class="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600">
+            <i data-lucide="store" class="w-4 h-4"></i> Business (PGBP)
+          </button>
+          <button onclick="switchTab('tab-gains')" id="btn-tab-gains" class="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600">
+            <i data-lucide="trending-up" class="w-4 h-4"></i> Cap Gains
+          </button>
+          <button onclick="switchTab('tab-ifos')" id="btn-tab-ifos" class="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600">
+            <i data-lucide="coins" class="w-4 h-4"></i> Other Sources
+          </button>
+          <button onclick="switchTab('tab-deductions')" id="btn-tab-deductions" class="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i> Deductions (Old)
+          </button>
+        </div>
+
+        <!-- Form Panels -->
+        <div class="p-6">
+          
+          <!-- TAB 1: General Info & Personal Details -->
+          <div id="tab-general" class="fade-in space-y-6">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+              <i data-lucide="user" class="text-indigo-600 w-5 h-5"></i> Taxpayer Personal Information
+            </h3>
+            
+            <!-- Personal Info Inputs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label for="taxpayerName" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Taxpayer Name</label>
+                <input type="text" id="taxpayerName" oninput="triggerCalculation()" placeholder="Enter Taxpayer Name" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-medium">
+              </div>
+
+              <div>
+                <label for="taxpayerPan" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">PAN (Permanent Account Number)</label>
+                <input type="text" id="taxpayerPan" oninput="triggerCalculation()" placeholder="ABCDE1234F" max-length="10" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm uppercase tracking-wider focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+              </div>
+
+              <div>
+                <label for="taxpayerMobile" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Contact Mobile Number</label>
+                <input type="tel" id="taxpayerMobile" oninput="triggerCalculation()" placeholder="99999 99999" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-medium">
+              </div>
+
+              <div>
+                <label for="taxpayerEmail" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Contact Email Address</label>
+                <input type="email" id="taxpayerEmail" oninput="triggerCalculation()" placeholder="client@example.com" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-medium">
+              </div>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 pt-4 flex items-center gap-2">
+              <i data-lucide="settings" class="text-indigo-600 w-5 h-5"></i> Taxpayer Configuration
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <!-- Taxpayer Category -->
+              <div>
+                <label for="taxpayerCategory" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Taxpayer Category</label>
+                <div class="relative">
+                  <select id="taxpayerCategory" onchange="triggerCalculation()" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition appearance-none">
+                    <option value="regular">Resident Individual (&lt; 60 Years)</option>
+                    <option value="senior">Senior Citizen (60 - 80 Years)</option>
+                    <option value="super_senior">Super Senior Citizen (&gt; 80 Years)</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Employment Type Toggle -->
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Employment Type</label>
+                <div class="bg-slate-100 p-1.5 rounded-xl flex gap-1 border border-slate-200">
+                  <button type="button" onclick="setEmployment('salaried')" id="btn-emp-salaried" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center shadow-sm bg-white border border-slate-200 text-indigo-700">
+                    Salaried / Pensioner
+                  </button>
+                  <button type="button" onclick="setEmployment('non-salaried')" id="btn-emp-non-salaried" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-600 hover:text-slate-900">
+                    Non-Salaried / Other
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Detailed Salary Income -->
+          <div id="tab-salary" class="fade-in space-y-6 hidden">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+              <i data-lucide="wallet" class="text-indigo-600 w-5 h-5"></i> Income from Salary u/s 15 & 17
+            </h3>
+            
+            <div class="space-y-4">
+              <!-- Basic Salary -->
+              <div>
+                <label for="salBasic" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Basic Salary u/s 17(1)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="salBasic" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-salBasic" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+              </div>
+
+              <!-- Dearness Allowance (DA) -->
+              <div>
+                <label for="salDa" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Dearness Allowance (DA) u/s 17(1)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="salDa" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-salDa" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+              </div>
+
+              <!-- HRA -->
+              <div>
+                <label for="salHra" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">House Rent Allowance (HRA) u/s 10(13A)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="salHra" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-salHra" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+              </div>
+
+              <!-- Other Allowances -->
+              <div>
+                <label for="salOtherAll" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Other Allowances (Travel, Education, Uniform allowances, etc.)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="salOtherAll" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-salOtherAll" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+              </div>
+
+              <!-- Perquisites -->
+              <div>
+                <label for="salPerq" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Perquisites / Benefits in Kind u/s 17(2)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="salPerq" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-salPerq" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+              </div>
+
+              <!-- Auto Gross Salary Show -->
+              <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
+                <div>
+                  <h5 class="text-xs font-bold text-indigo-900">Gross Salary (Subtotal)</h5>
+                  <p class="text-[10px] text-indigo-600">Basic + DA + HRA + Allowances + Perquisites</p>
+                </div>
+                <div class="text-right">
+                  <span id="txt-gross-subtotal" class="text-lg font-black text-indigo-950">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Exemption Fields for Old Regime -->
+              <div id="salary-exemptions-block" class="border-t pt-4 space-y-4">
+                <span class="block text-xs font-bold text-slate-600 uppercase tracking-wider border-b pb-1">Exemptions & Allowances (Old Regime Exclusives)</span>
+
+                <!-- HRA Exemption -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="salExHra" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Less: HRA Exemption u/s 10(13A)</label>
+                    <span class="text-[9px] text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded font-bold uppercase">Section 10(13A)</span>
+                  </div>
+                  <div class="relative rounded-xl shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <span class="text-slate-400 font-semibold text-sm">₹</span>
+                    </div>
+                    <input type="text" id="salExHra" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                  </div>
+                  <div id="word-salExHra" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+                </div>
+
+                <!-- Other Section 10 exemptions -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="salExOther" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Less: Other Exemptions u/s 10 (LTA, helper/uniform, etc.)</label>
+                    <span class="text-[9px] text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded font-bold uppercase">Section 10</span>
+                  </div>
+                  <div class="relative rounded-xl shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <span class="text-slate-400 font-semibold text-sm">₹</span>
+                    </div>
+                    <input type="text" id="salExOther" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                  </div>
+                  <div id="word-salExOther" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+                </div>
+
+                <!-- Professional Tax -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="salProfTax" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Less: Professional Tax paid u/s 16(iii)</label>
+                    <span class="text-[9px] text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded font-bold uppercase">Section 16(iii)</span>
+                  </div>
+                  <div class="relative rounded-xl shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <span class="text-slate-400 font-semibold text-sm">₹</span>
+                    </div>
+                    <input type="text" id="salProfTax" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                  </div>
+                  <div id="word-salProfTax" class="text-[10px] text-slate-400 mt-0.5 pl-1">₹ 0</div>
+                </div>
+              </div>
+
+              <!-- Standard Deduction Info Card -->
+              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="bg-emerald-100 text-emerald-800 p-2 rounded-xl">
+                    <i data-lucide="tag" class="w-4.5 h-4.5"></i>
+                  </div>
+                  <div>
+                    <h5 class="text-xs font-bold text-slate-700">Standard Deduction u/s 16(ia)</h5>
+                    <p class="text-[10px] text-slate-500">Auto-applied for Salaried taxpayers</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="block text-xs font-semibold text-slate-600">Old Regime: <strong class="text-slate-800" id="info-sd-old">₹50,000</strong></span>
+                  <span class="block text-xs font-semibold text-slate-600">New Regime: <strong class="text-emerald-600" id="info-sd-new">₹75,000</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: House Property -->
+          <div id="tab-hp" class="fade-in space-y-6 hidden">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+              <i data-lucide="home" class="text-indigo-600 w-5 h-5"></i> Income from House Property u/s 22 to 24
+            </h3>
+            
+            <div class="space-y-5">
+              <!-- Property Occupancy Type -->
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Property Occupancy Type</label>
+                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  <button type="button" onclick="setHPType('self')" id="btn-hp-self" class="py-2 text-xs font-semibold rounded-lg transition text-center shadow-sm bg-white border border-slate-200 text-indigo-700">
+                    Self-Occupied
+                  </button>
+                  <button type="button" onclick="setHPType('letout')" id="btn-hp-letout" class="py-2 text-xs font-semibold rounded-lg transition text-center text-slate-600 hover:text-slate-900">
+                    Let Out (Rented)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Let Out Fields (Hidden for self-occupied) -->
+              <div id="div-hp-rent-fields" class="grid grid-cols-1 md:grid-cols-2 gap-5 hidden">
+                <!-- Gross Rent Received -->
+                <div>
+                  <label for="hpRent" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Gross Annual Rent Received</label>
+                  <div class="relative rounded-xl shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <span class="text-slate-400 font-semibold text-sm">₹</span>
+                    </div>
+                    <input type="text" id="hpRent" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                  </div>
+                  <div id="word-hpRent" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+                </div>
+
+                <!-- Municipal Taxes Paid -->
+                <div>
+                  <label for="hpTaxes" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Municipal Taxes Paid to Local Authority</label>
+                  <div class="relative rounded-xl shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <span class="text-slate-400 font-semibold text-sm">₹</span>
+                    </div>
+                    <input type="text" id="hpTaxes" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                  </div>
+                  <div id="word-hpTaxes" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+                </div>
+              </div>
+
+              <!-- Stat 30% Deduction Callout (Only for Let Out) -->
+              <div id="div-hp-stat-calc" class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-xl flex items-center justify-between hidden">
+                <div>
+                  <h6 class="text-xs font-bold text-indigo-950">Statutory 30% Deduction u/s 24(a)</h6>
+                  <p class="text-[10px] text-indigo-600">Calculated automatically on Net Annual Value (NAV).</p>
+                </div>
+                <div class="text-right">
+                  <span id="txt-hp-stat-ded" class="text-sm font-bold text-indigo-950">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Home Loan Interest (Section 24b) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="hpInterest" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Interest on Home Loan (Section 24(b))</label>
+                  <span id="badge-hpInterest-info" class="bg-amber-100 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Capped at 2L (Old Regime)</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="hpInterest" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-hpInterest" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+                <p id="desc-hp-interest-law" class="text-[11px] text-slate-400 mt-1">
+                  Interest on self-occupied properties is restricted to <strong>NIL</strong> in the New Regime, and capped at <strong>₹2,00,000</strong> in the Old Regime. Loss set-offs against other heads are disallowed in New Regime.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Profits & Gains of Business or Profession (PGBP) -->
+          <div id="tab-business" class="fade-in space-y-6 hidden">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+              <i data-lucide="store" class="text-indigo-600 w-5 h-5"></i> Business &amp; Profession Income u/s 28 to 44
+            </h3>
+            
+            <div class="space-y-5">
+              <!-- PGBP Net Profits -->
+              <div>
+                <label for="pgbpIncome" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Net Taxable Profit / Presumptive Income (u/s 44AD / 44ADA / 44AE)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="pgbpIncome" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-pgbpIncome" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+                <p class="text-[11px] text-slate-400 mt-1.5">Enter Net Profit from business/profession or presumptive income schemas u/s 44AD, 44ADA, etc.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: Capital Gains -->
+          <div id="tab-gains" class="fade-in space-y-6 hidden">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+              <i data-lucide="trending-up" class="text-indigo-600 w-5 h-5"></i> Capital Gains u/s 45 to 55
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <!-- Short Term Capital Gains (Special 20% u/s 111A) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="stcg111a" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">STCG u/s 111A (Equity)</label>
+                  <span class="bg-indigo-100 text-indigo-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Rate: 20%</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="stcg111a" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-stcg111a" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Short Term Capital Gains (Slab Rate) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="stcgSlab" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Other STCG (Slab Rated)</label>
+                  <span class="bg-slate-100 text-slate-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Rate: Slab</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="stcgSlab" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-stcgSlab" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Long Term Capital Gains (Equity u/s 112A) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="ltcg112a" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">LTCG u/s 112A (Equity)</label>
+                  <span class="bg-indigo-100 text-indigo-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Rate: 12.5%</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ltcg112a" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-ltcg112a" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Long Term Capital Gains (Others) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="ltcgOther" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Other LTCG (Property/Gold)</label>
+                  <span class="bg-indigo-100 text-indigo-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Rate: 12.5%</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ltcgOther" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-ltcgOther" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 6: Income from Other Sources (IFOS) -->
+          <div id="tab-ifos" class="fade-in space-y-6 hidden">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+              <i data-lucide="coins" class="text-indigo-600 w-5 h-5"></i> Other Sources Income u/s 56
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <!-- Savings Bank Interest -->
+              <div>
+                <label for="ifosSavings" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Savings Bank Interest u/s 56(2)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ifosSavings" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-ifosSavings" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Fixed Deposit Interest -->
+              <div>
+                <label for="ifosFd" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">FD / Term Deposit Interest</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ifosFd" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-ifosFd" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Dividend Income -->
+              <div>
+                <label for="ifosDividend" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Dividend Income</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ifosDividend" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-ifosDividend" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Miscellaneous -->
+              <div>
+                <label for="ifosOther" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Other Miscellaneous Income</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ifosOther" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                </div>
+                <div id="word-ifosOther" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 7: Deductions (Old Regime) -->
+          <div id="tab-deductions" class="fade-in space-y-6 hidden">
+            <div class="flex items-center justify-between border-b pb-2">
+              <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="shield-alert" class="text-indigo-600 w-5 h-5"></i> Deductions (Chapter VI-A)
+              </h3>
+              <span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Old Regime Exclusive</span>
+            </div>
+            
+            <div class="space-y-5">
+              <!-- Section 80C -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="ded80C" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Section 80C (PPF, ELSS, EPF, Life Insurance, Home Loan Principal)</label>
+                  <span class="bg-slate-100 text-slate-800 text-[9px] font-semibold px-2 py-0.5 rounded">Capped: 1.5L</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ded80C" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-ded80C" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Section 80D -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="ded80D" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Section 80D (Health Insurance Premium)</label>
+                  <span id="lbl-80d-cap" class="bg-slate-100 text-slate-800 text-[9px] font-semibold px-2 py-0.5 rounded">Dynamic Cap: 75k</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ded80D" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-ded80D" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Section 80CCD(2) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="ded80CCD2" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">NPS Employer Contribution u/s 80CCD(2)</label>
+                  <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">Allowed in Both Regimes</span>
+                </div>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="ded80CCD2" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-ded80CCD2" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Other Deductions -->
+              <div>
+                <label for="dedOther" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Other Deductions (Section 80E, 80G, etc.)</label>
+                <div class="relative rounded-xl shadow-sm">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-sm">₹</span>
+                  </div>
+                  <input type="text" id="dedOther" oninput="formatAndCalc(this)" placeholder="0" class="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition font-semibold">
+                </div>
+                <div id="word-dedOther" class="text-[11px] text-slate-400 mt-1 font-medium pl-1">₹ 0</div>
+              </div>
+
+              <!-- Section 80TTA / 80TTB -->
+              <div class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-xl flex items-center justify-between">
+                <div>
+                  <h6 class="text-xs font-bold text-indigo-950 flex items-center gap-1">
+                    Section <span id="lbl-tta-ttb">80TTA</span> Deduction (Savings Bank Interest)
+                  </h6>
+                  <p id="desc-tta-ttb" class="text-[10px] text-indigo-600 font-medium">Auto-extracted from your Interest Income input and capped.</p>
+                </div>
+                <div class="text-right">
+                  <span id="txt-ded-tta-ttb" class="text-sm font-bold text-indigo-950">₹ 0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Column: Sticky Dashboard & Comparison -->
+      <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
+        
+        <!-- Regime Recommendation Banner -->
+        <div id="recommendation-banner" class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl p-5 shadow-md flex items-center gap-4 border border-emerald-500/20">
+          <div class="bg-white/20 p-2.5 rounded-xl shadow-inner backdrop-blur-sm">
+            <i data-lucide="party-popper" class="w-8 h-8 text-emerald-100"></i>
+          </div>
+          <div>
+            <span class="block text-[10px] text-emerald-200 uppercase font-bold tracking-widest">Recommended Choice</span>
+            <h3 id="txt-recommendation-title" class="text-lg font-bold heading-font leading-tight">New Regime is better!</h3>
+            <p id="txt-recommendation-desc" class="text-xs text-emerald-100 mt-0.5">Start entering details to compare values.</p>
+          </div>
+        </div>
+
+        <!-- Comparative Dashboard Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-slate-50 border-b border-slate-200 px-5 py-4 flex items-center justify-between">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2">
+              <i data-lucide="pie-chart" class="text-indigo-600 w-5 h-5"></i> Side-by-Side Comparison
+            </h3>
+            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded">Real-Time</span>
+          </div>
+
+          <div class="p-5">
+            <!-- Summary Table Grid -->
+            <div class="space-y-3.5">
+              <!-- Gross Total Income -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-500 font-medium">Gross Income (All Heads)</span>
+                <div class="flex items-center gap-8 font-semibold">
+                  <span id="lbl-gti-old" class="w-24 text-right text-slate-700">₹ 0</span>
+                  <span id="lbl-gti-new" class="w-24 text-right text-slate-800">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Deductions & Exemptions -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-500 font-medium">Exemptions & Deductions</span>
+                <div class="flex items-center gap-8 font-semibold">
+                  <span id="lbl-ded-old" class="w-24 text-right text-slate-700">₹ 0</span>
+                  <span id="lbl-ded-new" class="w-24 text-right text-slate-800">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Net Taxable Income -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-600 font-bold">Net Taxable Income</span>
+                <div class="flex items-center gap-8 font-bold">
+                  <span id="lbl-nti-old" class="w-24 text-right text-slate-800">₹ 0</span>
+                  <span id="lbl-nti-new" class="w-24 text-right text-indigo-900">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Basic Tax (Normal & Special Rates) -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-500 font-medium">Basic Tax Liability</span>
+                <div class="flex items-center gap-8 font-semibold">
+                  <span id="lbl-basictax-old" class="w-24 text-right text-slate-700">₹ 0</span>
+                  <span id="lbl-basictax-new" class="w-24 text-right text-slate-800">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Section 87A Rebate -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-500 font-medium">Rebate u/s 87A</span>
+                <div class="flex items-center gap-8 font-semibold">
+                  <span id="lbl-rebate-old" class="w-24 text-right text-emerald-600">₹ 0</span>
+                  <span id="lbl-rebate-new" class="w-24 text-right text-emerald-600">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Surcharge -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-500 font-medium">Surcharge (inc. Relief)</span>
+                <div class="flex items-center gap-8 font-semibold">
+                  <span id="lbl-surcharge-old" class="w-24 text-right text-amber-600">₹ 0</span>
+                  <span id="lbl-surcharge-new" class="w-24 text-right text-amber-600">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Cess (4%) -->
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100 text-sm">
+                <span class="text-slate-500 font-medium">Health &amp; Edu. Cess (4%)</span>
+                <div class="flex items-center gap-8 font-semibold">
+                  <span id="lbl-cess-old" class="w-24 text-right text-slate-700">₹ 0</span>
+                  <span id="lbl-cess-new" class="w-24 text-right text-slate-800">₹ 0</span>
+                </div>
+              </div>
+
+              <!-- Final Tax Payable (Highlight Card) -->
+              <div class="mt-4 bg-slate-50 rounded-2xl p-4 border border-slate-150 shadow-inner">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-bold text-slate-900 uppercase tracking-wider">Final Tax Payable</span>
+                  <div class="flex items-center gap-8 text-lg font-black heading-font">
+                    <span id="lbl-payable-old" class="w-24 text-right text-slate-900">₹ 0</span>
+                    <span id="lbl-payable-new" class="w-24 text-right text-indigo-950">₹ 0</span>
+                  </div>
+                </div>
+                <!-- Mini Header Labels for Slabs -->
+                <div class="flex justify-end gap-8 mt-2 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                  <span class="w-24 text-right">Old Regime</span>
+                  <span class="w-24 text-right">New Regime</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick View Breakdown Button -->
+            <button onclick="toggleModal('tax-modal')" class="w-full mt-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-3 rounded-xl transition duration-150 flex items-center justify-center gap-2 border border-indigo-200 shadow-sm">
+              <i data-lucide="eye" class="w-4 h-4"></i> View Detailed Tax Slab Breakup
+            </button>
+
+            <!-- Generate PDF Report Button -->
+            <button onclick="generatePDF()" class="w-full mt-2.5 bg-indigo-600 hover:bg-indigo-750 text-white text-xs font-bold py-3.5 rounded-xl transition duration-150 flex items-center justify-center gap-2 border border-indigo-700 shadow-md">
+              <i data-lucide="printer" class="w-4 h-4"></i> Submit &amp; Generate Report (PDF)
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Detailed Tax Breakdown Modal -->
+  <div id="tax-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      
+      <!-- Backdrop -->
+      <div onclick="toggleModal('tax-modal')" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+
+      <!-- Modal panel placement helper -->
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+      <!-- Modal Content Box -->
+      <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full border border-slate-200">
+        <!-- Modal Header -->
+        <div class="bg-slate-900 px-6 py-4 flex items-center justify-between text-white">
+          <div>
+            <h3 class="text-lg font-bold heading-font flex items-center gap-2">
+              <i data-lucide="file-text" class="text-indigo-400 w-5 h-5"></i> Tax Slab Calculation Breakup
+            </h3>
+            <p class="text-xs text-slate-400">Assessment Year 2026-27 | Side-by-side computation</p>
+          </div>
+          <button onclick="toggleModal('tax-modal')" class="text-slate-400 hover:text-white transition">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Old Regime Slabs -->
+            <div class="space-y-4">
+              <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                <span class="block text-[10px] text-slate-500 uppercase font-bold tracking-widest">Selected Slabs</span>
+                <h4 class="text-md font-bold text-slate-800 heading-font" id="modal-old-title">Old Regime (Resident &lt; 60 Years)</h4>
+              </div>
+              <div class="space-y-2" id="modal-old-slabs">
+                <!-- Slabs dynamically injected -->
+              </div>
+              <div class="border-t pt-3 flex justify-between text-sm font-bold text-slate-900 px-2">
+                <span>Total Normal Tax:</span>
+                <span id="modal-old-total-normal">₹ 0</span>
+              </div>
+            </div>
+
+            <!-- New Regime Slabs -->
+            <div class="space-y-4">
+              <div class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-xl">
+                <span class="block text-[10px] text-indigo-500 uppercase font-bold tracking-widest">Selected Slabs</span>
+                <h4 class="text-md font-bold text-indigo-950 heading-font">New Regime (u/s 115BAC)</h4>
+              </div>
+              <div class="space-y-2" id="modal-new-slabs">
+                <!-- Slabs dynamically injected -->
+              </div>
+              <div class="border-t pt-3 flex justify-between text-sm font-bold text-indigo-950 px-2">
+                <span>Total Normal Tax:</span>
+                <span id="modal-new-total-normal">₹ 0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Capital Gains Table -->
+          <div class="border-t pt-5">
+            <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5">
+              <i data-lucide="trending-up" class="w-4 h-4 text-indigo-600"></i> Special Capital Gains Tax Computation
+            </h4>
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Income Value</th>
+                    <th class="px-4 py-3">Tax Rate</th>
+                    <th class="px-4 py-3 text-right">Tax (Old Regime)</th>
+                    <th class="px-4 py-3 text-right">Tax (New Regime)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100" id="modal-special-table-body">
+                  <!-- Injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="bg-slate-50 px-6 py-4 flex justify-end border-t border-slate-200">
+          <button onclick="toggleModal('tax-modal')" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition duration-150">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Template Container (Completely hidden on screen, formatted strictly for A4 print/PDF) -->
+  <div id="print-area" class="w-full max-w-4xl mx-auto p-8 bg-white border border-slate-350 space-y-6">
+    <!-- CA Letterhead Header -->
+    <div class="border-b-4 border-slate-800 pb-4 flex justify-between items-start">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900 heading-font uppercase">CA Chirag Rajpurohit</h1>
+        <p class="text-xs font-bold text-slate-600 tracking-wide mt-0.5">Chartered Accountant &amp; Senior Tax Consultant</p>
+        <p class="text-[10px] text-slate-500 leading-normal max-w-sm mt-1">Audit, Corporate Filings, Scrutiny Cases Representation, and Wealth Advisory Services</p>
+      </div>
+      <div class="text-right text-xs text-slate-600 space-y-0.5">
+        <span class="block font-bold">Contact Office</span>
+        <span class="block">Mobile: 81400 39744</span>
+        <span class="block">Email: cachiragrajpurohit@gmail.com</span>
+      </div>
+    </div>
+
+    <!-- Title of Document -->
+    <div class="text-center bg-slate-100 py-2 border-y border-slate-300 font-bold heading-font uppercase text-sm tracking-wide text-slate-900">
+      Income Tax Computation Sheet (Assessment Year 2026-27)
+    </div>
+
+    <!-- Taxpayer Details Grid -->
+    <div class="grid grid-cols-2 gap-x-8 gap-y-2 border border-slate-300 p-4 rounded-xl text-xs bg-slate-50/50">
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Taxpayer Name:</span> <strong id="print-taxpayer-name" class="text-slate-800 text-sm">N/A</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Financial Year:</span> <strong class="text-slate-800">2025-26</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">PAN / Tax ID:</span> <strong id="print-taxpayer-pan" class="text-slate-800 uppercase">N/A</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Assessment Year:</span> <strong class="text-slate-800">2026-27</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Mobile Number:</span> <strong id="print-taxpayer-mobile" class="text-slate-800">N/A</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Taxpayer Category:</span> <strong id="print-taxpayer-cat" class="text-slate-800">N/A</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Email Address:</span> <strong id="print-taxpayer-email" class="text-slate-800">N/A</strong></div>
+      <div><span class="font-bold text-slate-500 uppercase tracking-wider">Date Generated:</span> <strong id="print-taxpayer-date" class="text-slate-800">N/A</strong></div>
+    </div>
+
+    <!-- Main Computation Table -->
+    <div>
+      <h3 class="text-xs font-bold text-slate-800 uppercase tracking-widest border-b pb-1 mb-2">Computation of Net Taxable Income</h3>
+      <table class="w-full text-left text-xs border-collapse">
+        <thead>
+          <tr class="bg-slate-800 text-white font-bold uppercase tracking-wider">
+            <th class="px-3 py-2 border border-slate-300">Particulars / Source of Income</th>
+            <th class="px-3 py-2 border border-slate-300 text-right w-36">Old Regime (₹)</th>
+            <th class="px-3 py-2 border border-slate-300 text-right w-36">New Regime (₹)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-300 border-b border-slate-300">
+          <tr>
+            <td class="px-3 py-1.5 font-bold">1. Income from Salary u/s 15</td>
+            <td id="p-sal-old" class="px-3 py-1.5 text-right">0</td>
+            <td id="p-sal-new" class="px-3 py-1.5 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600">
+            <td class="px-5 py-1 italic">- Basic Salary u/s 17(1)</td>
+            <td id="p-sal-basic-old" class="px-3 py-1 text-right">0</td>
+            <td id="p-sal-basic-new" class="px-3 py-1 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600">
+            <td class="px-5 py-1 italic">- Dearness Allowance u/s 17(1)</td>
+            <td id="p-sal-da-old" class="px-3 py-1 text-right">0</td>
+            <td id="p-sal-da-new" class="px-3 py-1 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600">
+            <td class="px-5 py-1 italic">- House Rent Allowance u/s 10(13A)</td>
+            <td id="p-sal-hra-old" class="px-3 py-1 text-right">0</td>
+            <td id="p-sal-hra-new" class="px-3 py-1 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600">
+            <td class="px-5 py-1 italic">- Other Allowances</td>
+            <td id="p-sal-otherall-old" class="px-3 py-1 text-right">0</td>
+            <td id="p-sal-otherall-new" class="px-3 py-1 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600">
+            <td class="px-5 py-1 italic">- Perquisites u/s 17(2)</td>
+            <td id="p-sal-perq-old" class="px-3 py-1 text-right">0</td>
+            <td id="p-sal-perq-new" class="px-3 py-1 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600 bg-red-50/20">
+            <td class="px-5 py-1 font-semibold">- Less: Exemptions u/s 10 (HRA / LTA / PT)</td>
+            <td id="p-sal-ex-old" class="px-3 py-1 text-right">0</td>
+            <td class="px-3 py-1 text-right italic text-slate-400">Restricted (0)</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600 bg-red-50/20">
+            <td class="px-5 py-1 font-semibold">- Less: Standard Deduction u/s 16(ia)</td>
+            <td id="p-sal-sd-old" class="px-3 py-1 text-right">50,000</td>
+            <td id="p-sal-sd-new" class="px-3 py-1 text-right">75,000</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5 font-bold">2. Income from House Property u/s 22</td>
+            <td id="p-hp-old" class="px-3 py-1.5 text-right">0</td>
+            <td id="p-hp-new" class="px-3 py-1.5 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5 font-bold">3. Profits and Gains of Business/Profession (PGBP) u/s 28</td>
+            <td id="p-pgbp-old" class="px-3 py-1.5 text-right">0</td>
+            <td id="p-pgbp-new" class="px-3 py-1.5 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5 font-bold">4. Income from Capital Gains u/s 45</td>
+            <td id="p-cg-old" class="px-3 py-1.5 text-right">0</td>
+            <td id="p-cg-new" class="px-3 py-1.5 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5 font-bold">5. Income from Other Sources u/s 56</td>
+            <td id="p-ifos-old" class="px-3 py-1.5 text-right">0</td>
+            <td id="p-ifos-new" class="px-3 py-1.5 text-right">0</td>
+          </tr>
+          <tr class="bg-slate-100 font-bold">
+            <td class="px-3 py-2 uppercase">Gross Total Income (GTI)</td>
+            <td id="p-gti-old" class="px-3 py-2 text-right">0</td>
+            <td id="p-gti-new" class="px-3 py-2 text-right">0</td>
+          </tr>
+          <tr class="text-[10px] text-slate-600 bg-red-50/20">
+            <td class="px-5 py-1 italic">- Less: Deductions under Chapter VI-A (80C, 80D, 80TTA, etc.)</td>
+            <td id="p-ded-old" class="px-3 py-1 text-right">0</td>
+            <td id="p-ded-new" class="px-3 py-1 text-right">0</td>
+          </tr>
+          <tr class="bg-indigo-50 font-bold">
+            <td class="px-3 py-2 uppercase text-indigo-950">Net Taxable Income (NTI)</td>
+            <td id="p-nti-old" class="px-3 py-2 text-right text-slate-800">0</td>
+            <td id="p-nti-new" class="px-3 py-2 text-right text-indigo-950">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tax Liability Table -->
+    <div>
+      <h3 class="text-xs font-bold text-slate-800 uppercase tracking-widest border-b pb-1 mb-2">Computation of Net Tax Liability</h3>
+      <table class="w-full text-left text-xs border-collapse">
+        <tbody class="divide-y divide-slate-300 border border-slate-300">
+          <tr>
+            <td class="px-3 py-1.5 font-bold">Basic Tax at Slab Rates (and Special Rates)</td>
+            <td id="p-tax-basic-old" class="px-3 py-1.5 text-right w-36 font-semibold">0</td>
+            <td id="p-tax-basic-new" class="px-3 py-1.5 text-right w-36 font-semibold">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5">Less: Rebate u/s 87A</td>
+            <td id="p-tax-rebate-old" class="px-3 py-1.5 text-right font-semibold text-emerald-700">0</td>
+            <td id="p-tax-rebate-new" class="px-3 py-1.5 text-right font-semibold text-emerald-700">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5">Add: Surcharge (including Surcharge relief u/s 115BAC)</td>
+            <td id="p-tax-surcharge-old" class="px-3 py-1.5 text-right font-semibold">0</td>
+            <td id="p-tax-surcharge-new" class="px-3 py-1.5 text-right font-semibold">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-1.5">Add: Health &amp; Education Cess (4%)</td>
+            <td id="p-tax-cess-old" class="px-3 py-1.5 text-right font-semibold">0</td>
+            <td id="p-tax-cess-new" class="px-3 py-1.5 text-right font-semibold">0</td>
+          </tr>
+          <tr class="bg-indigo-900 text-white font-bold text-sm">
+            <td class="px-3 py-2 uppercase">Net Income Tax Payable</td>
+            <td id="p-tax-payable-old" class="px-3 py-2 text-right">0</td>
+            <td id="p-tax-payable-new" class="px-3 py-2 text-right">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Recommendations & Notes -->
+    <div class="border border-slate-350 rounded-xl p-4 space-y-2 bg-slate-50/50">
+      <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Regime Recommendation &amp; Tax advisory notes</h4>
+      <p id="p-rec-text" class="text-xs text-slate-700 leading-relaxed font-semibold">
+        Calculating advice...
+      </p>
+      <p class="text-[10px] text-slate-500 leading-relaxed">
+        <strong>Disclaimer:</strong> This computation sheet is prepared for Assessment Year 2026-27 (Financial Year 2025-26) under prevailing provisions of the Income Tax Act, 1961. The final tax liability is subject to verified documentation, filing parameters, and actual returns submission. Taxpayers are advised to consult their Chartered Accountant before executing standard filings.
+      </p>
+    </div>
+
+    <!-- Signature Block -->
+    <div class="pt-12 flex justify-between items-center text-xs">
+      <div>
+        <p class="text-slate-500">Prepared &amp; Advisory Certified by:</p>
+        <p class="font-bold text-slate-800 mt-6 uppercase text-sm">CA Chirag Rajpurohit</p>
+        <p class="text-slate-500 text-[10px]">Chartered Accountant | Membership No: [Seal Reference]</p>
+      </div>
+      <div class="text-center">
+        <div class="w-36 border-b border-slate-400 h-10"></div>
+        <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-bold">Authorized Signature / Seal</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 mt-12 py-8 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-6 border-b border-slate-800">
+        <!-- Credentials/Contact -->
+        <div>
+          <h4 class="text-white font-bold heading-font text-sm uppercase tracking-wider mb-3">CA Chirag Rajpurohit</h4>
+          <p class="text-xs leading-relaxed max-w-md">For expert financial advising, income tax scrutiny defense, tax planning audits, wealth management, and corporate filing advisory services, feel free to schedule a session.</p>
+          <div class="mt-4 space-y-2 text-xs">
+            <a href="tel:+918140039744" class="flex items-center gap-2 hover:text-white transition">
+              <i data-lucide="phone" class="w-4 h-4 text-indigo-400"></i> +91 81400 39744
+            </a>
+            <a href="mailto:cachiragrajpurohit@gmail.com" class="flex items-center gap-2 hover:text-white transition">
+              <i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i> cachiragrajpurohit@gmail.com
+            </a>
+          </div>
+        </div>
+
+        <!-- Disclaimers / Info -->
+        <div class="flex flex-col justify-between">
+          <div class="text-xs">
+            <span class="block text-white font-bold heading-font uppercase tracking-wider mb-2">Professional Consultation Contact</span>
+            <p class="leading-relaxed">For professional consultation, contact: <strong>CA Chirag Rajpurohit</strong>. All calculations are mock simulations matching standard rules for A.Y. 2026-27 and do not constitute formal tax assessments. File your final returns under expert guidelines.</p>
+          </div>
+          <div class="text-[10px] text-slate-500 mt-4 flex items-center justify-between">
+            <span>&copy; 2026 CA Chirag Rajpurohit. All Rights Reserved.</span>
+            <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i> Premium Advisor tool</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script Logic -->
+  <script>
+    // State of global inputs
+    let currentEmploymentType = 'salaried';
+    let currentHPType = 'self';
+    let activeTabId = 'tab-general';
+
+    // UI Tab Navigation
+    function switchTab(tabId) {
+      // Hide all panels
+      const panels = ['tab-general', 'tab-salary', 'tab-hp', 'tab-business', 'tab-gains', 'tab-ifos', 'tab-deductions'];
+      panels.forEach(p => {
+        document.getElementById(p).classList.add('hidden');
+        document.getElementById(`btn-${p}`).className = "flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent hover:text-indigo-600 transition duration-150 text-slate-600";
+      });
+
+      // Show selected panel
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById(`btn-${tabId}`).className = "tab-active flex-shrink-0 flex items-center gap-2 px-4 py-3 text-xs md:text-sm font-semibold rounded-xl border-b-2 border-transparent transition duration-150";
+      activeTabId = tabId;
+    }
+
+    // Toggle self-occupied vs letout HP properties
+    function setHPType(type) {
+      currentHPType = type;
+      const btnSelf = document.getElementById('btn-hp-self');
+      const btnLetout = document.getElementById('btn-hp-letout');
+      const rentFields = document.getElementById('div-hp-rent-fields');
+      const statCalc = document.getElementById('div-hp-stat-calc');
+      const interestBadge = document.getElementById('badge-hpInterest-info');
+      const interestDesc = document.getElementById('desc-hp-interest-law');
+
+      if (type === 'self') {
+        btnSelf.className = "py-2 text-xs font-semibold rounded-lg transition text-center shadow-sm bg-white border border-slate-200 text-indigo-700 flex-1";
+        btnLetout.className = "py-2 text-xs font-semibold rounded-lg transition text-center text-slate-600 hover:text-slate-900 flex-1";
+        rentFields.classList.add('hidden');
+        statCalc.classList.add('hidden');
+        interestBadge.textContent = "Capped at 2L (Old Regime)";
+        interestDesc.innerHTML = "Interest on self-occupied properties is restricted to <strong>NIL</strong> in the New Regime, and capped at <strong>₹2,00,000</strong> in the Old Regime. Loss set-offs are disallowed in New Regime.";
+      } else {
+        btnSelf.className = "py-2 text-xs font-semibold rounded-lg transition text-center text-slate-600 hover:text-slate-900 flex-1";
+        btnLetout.className = "py-2 text-xs font-semibold rounded-lg transition text-center shadow-sm bg-white border border-slate-200 text-indigo-700 flex-1";
+        rentFields.classList.remove('hidden');
+        statCalc.classList.remove('hidden');
+        interestBadge.textContent = "Fully allowed (Both Regimes)";
+        interestDesc.innerHTML = "For Let Out property, interest is fully deductible in both regimes. However, Net HP Loss set-off is restricted to ₹2 Lakh in Old Regime and <strong>NIL</strong> in New Regime (can only carry forward).";
+      }
+      triggerCalculation();
+    }
+
+    // Toggle Employment configuration
+    function setEmployment(type) {
+      currentEmploymentType = type;
+      const btnSalaried = document.getElementById('btn-emp-salaried');
+      const btnNonSalaried = document.getElementById('btn-emp-non-salaried');
+      
+      if (type === 'salaried') {
+        btnSalaried.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center shadow-sm bg-white border border-slate-200 text-indigo-700";
+        btnNonSalaried.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-600 hover:text-slate-900";
+      } else {
+        btnSalaried.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center text-slate-600 hover:text-slate-900";
+        btnNonSalaried.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-center shadow-sm bg-white border border-slate-200 text-indigo-700";
+      }
+      
+      const salaryExemptionsBlock = document.getElementById('salary-exemptions-block');
+      if (type === 'salaried') {
+        salaryExemptionsBlock.classList.remove('hidden');
+      } else {
+        salaryExemptionsBlock.classList.add('hidden');
+      }
+      
+      triggerCalculation();
+    }
+
+    // Currency text format converters
+    function numberToWords(num) {
+      if (num === 0) return 'Zero Rupees';
+      const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+      
+      const formatHundreds = (n) => {
+        let str = '';
+        if (n >= 100) {
+          str += a[Math.floor(n / 100)] + ' Hundred ';
+          n %= 100;
+        }
+        if (n > 0) {
+          if (n < 20) str += a[n];
+          else {
+            str += b[Math.floor(n / 10)] + (n % 10 > 0 ? ' ' + a[n % 10] : '');
+          }
+        }
+        return str.trim();
+      };
+
+      let words = '';
+      const crore = Math.floor(num / 10000000);
+      num %= 10000000;
+      const lakh = Math.floor(num / 100000);
+      num %= 100000;
+      const thousand = Math.floor(num / 1000);
+      num %= 1000;
+      
+      if (crore > 0) words += formatHundreds(crore) + ' Crore ';
+      if (lakh > 0) words += formatHundreds(lakh) + ' Lakh ';
+      if (thousand > 0) words += formatHundreds(thousand) + ' Thousand ';
+      if (num > 0) words += formatHundreds(num);
+      
+      return words.trim() + ' Rupees Only';
+    }
+
+    function formatCurrency(val) {
+      const num = Math.round(parseFloat(val));
+      if (isNaN(num)) return '₹ 0';
+      const x = num.toString().split('.');
+      let lastThree = x[0].substring(x[0].length - 3);
+      const otherNumbers = x[0].substring(0, x[0].length - 3);
+      if (otherNumbers !== '') {
+        lastThree = ',' + lastThree;
+      }
+      const res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+      return '₹ ' + (x.length > 1 ? res + '.' + x[1] : res);
+    }
+
+    // Input text validation and formatting on input trigger
+    function formatAndCalc(inputElement) {
+      let rawVal = inputElement.value.replace(/[^0-9]/g, '');
+      const parsedVal = parseInt(rawVal) || 0;
+      
+      const helpLabel = document.getElementById('word-' + inputElement.id);
+      if (helpLabel) {
+        if (parsedVal === 0) {
+          helpLabel.textContent = '₹ 0';
+        } else {
+          helpLabel.textContent = `${formatCurrency(parsedVal)} (${numberToWords(parsedVal)})`;
+        }
+      }
+      
+      inputElement.value = parsedVal === 0 ? '' : parsedVal.toLocaleString('en-IN');
+      triggerCalculation();
+    }
+
+    function getInputValue(id) {
+      const el = document.getElementById(id);
+      if (!el) return 0;
+      const raw = el.value.replace(/[^0-9]/g, '');
+      return parseInt(raw) || 0;
+    }
+
+    function setInputValue(id, val) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = val === 0 ? '' : val.toLocaleString('en-IN');
+      const helpLabel = document.getElementById('word-' + id);
+      if (helpLabel) {
+        helpLabel.textContent = val === 0 ? '₹ 0' : `${formatCurrency(val)} (${numberToWords(val)})`;
+      }
+    }
+
+    // Reset Inputs
+    function resetInputs() {
+      document.getElementById('taxpayerName').value = '';
+      document.getElementById('taxpayerPan').value = '';
+      document.getElementById('taxpayerMobile').value = '';
+      document.getElementById('taxpayerEmail').value = '';
+      
+      document.getElementById('taxpayerCategory').value = 'regular';
+      setEmployment('salaried');
+      setHPType('self');
+      
+      const inputsList = [
+        'salBasic', 'salDa', 'salHra', 'salOtherAll', 'salPerq',
+        'salExHra', 'salExOther', 'salProfTax',
+        'hpRent', 'hpTaxes', 'hpInterest', 'pgbpIncome',
+        'stcg111a', 'stcgSlab', 'ltcg112a', 'ltcgOther', 'ifosSavings', 'ifosFd',
+        'ifosDividend', 'ifosOther', 'ded80C', 'ded80D', 'ded80CCD2', 'dedOther'
+      ];
+      inputsList.forEach(id => setInputValue(id, 0));
+      triggerCalculation();
+    }
+
+    // Slabs definitions (AY 2026-27 / FY 2025-26)
+    const slabsNew = [
+      { min: 0, max: 400000, rate: 0.0 },
+      { min: 400000, max: 800000, rate: 0.05 },
+      { min: 800000, max: 1200000, rate: 0.10 },
+      { min: 1200000, max: 1600000, rate: 0.15 },
+      { min: 1600000, max: 2000000, rate: 0.20 },
+      { min: 2000000, max: 2400000, rate: 0.25 },
+      { min: 2400000, max: Infinity, rate: 0.30 }
+    ];
+
+    const slabsOldRegular = [
+      { min: 0, max: 250000, rate: 0.0 },
+      { min: 250000, max: 500000, rate: 0.05 },
+      { min: 500000, max: 1000000, rate: 0.20 },
+      { min: 1000000, max: Infinity, rate: 0.30 }
+    ];
+
+    const slabsOldSenior = [
+      { min: 0, max: 300000, rate: 0.0 },
+      { min: 300000, max: 500000, rate: 0.05 },
+      { min: 500000, max: 1000000, rate: 0.20 },
+      { min: 1000000, max: Infinity, rate: 0.30 }
+    ];
+
+    const slabsOldSuperSenior = [
+      { min: 0, max: 500000, rate: 0.0 },
+      { min: 500000, max: 1000000, rate: 0.20 },
+      { min: 1000000, max: Infinity, rate: 0.30 }
+    ];
+
+    function getOldRegimeSlabs(ageCategory) {
+      if (ageCategory === 'senior') return slabsOldSenior;
+      if (ageCategory === 'super_senior') return slabsOldSuperSenior;
+      return slabsOldRegular;
+    }
+
+    function calculateNormalTax(normalIncome, slabs) {
+      let tax = 0;
+      let breakup = [];
+      
+      for (let i = 0; i < slabs.length; i++) {
+        const slab = slabs[i];
+        if (normalIncome > slab.min) {
+          const taxable = Math.min(normalIncome, slab.max) - slab.min;
+          const slabTax = taxable * slab.rate;
+          tax += slabTax;
+          breakup.push({
+            min: slab.min,
+            max: slab.max,
+            rate: slab.rate,
+            taxable: taxable,
+            tax: slabTax
+          });
+        } else {
+          breakup.push({
+            min: slab.min,
+            max: slab.max,
+            rate: slab.rate,
+            taxable: 0,
+            tax: 0
+          });
+        }
+      }
+      return { tax, breakup };
+    }
+
+    function calculateSpecialGainsTax(stcg111a, ltcg112a, ltcgOther, unexhaustedExemption) {
+      let remainingExemption = unexhaustedExemption;
+      
+      // Order of offset: 1. Other LTCG (12.5%), 2. LTCG 112A (12.5%), 3. STCG 111A (20%)
+      let offsetLtcgOther = Math.min(ltcgOther, remainingExemption);
+      remainingExemption -= offsetLtcgOther;
+      let taxableLtcgOther = ltcgOther - offsetLtcgOther;
+      let taxLtcgOther = taxableLtcgOther * 0.125;
+
+      let offsetLtcg112a = Math.min(ltcg112a, remainingExemption);
+      remainingExemption -= offsetLtcg112a;
+      let remainingLtcg112a = ltcg112a - offsetLtcg112a;
+      
+      // Subtract ₹1.25L statutory exemption
+      let taxableLtcg112a = Math.max(0, remainingLtcg112a - 125000);
+      let taxLtcg112a = taxableLtcg112a * 0.125;
+
+      let offsetStcg111a = Math.min(stcg111a, remainingExemption);
+      remainingExemption -= offsetStcg111a;
+      let taxableStcg111a = stcg111a - offsetStcg111a;
+      let taxStcg111a = taxableStcg111a * 0.20;
+
+      return {
+        taxLtcgOther,
+        taxLtcg112a,
+        taxStcg111a,
+        taxableLtcgOther,
+        taxableLtcg112a,
+        taxableStcg111a,
+        remainingExemption
+      };
+    }
+
+    function computeSurcharge(regime, totalIncome, basicTax, specialTax, ageCategory, mockCalculator) {
+      if (totalIncome <= 5000000) return { surcharge: 0, relief: 0, rate: '0%' };
+      
+      const normalTax = Math.max(0, basicTax - specialTax);
+      
+      let rateNormal = 0;
+      let rateSpecial = 0.15; // capped at 15%
+      
+      if (totalIncome <= 10000000) {
+        rateNormal = 0.10;
+        rateSpecial = 0.10;
+      } else if (totalIncome <= 20000000) {
+        rateNormal = 0.15;
+        rateSpecial = 0.15;
+      } else {
+        rateSpecial = 0.15;
+        if (regime === 'new') {
+          rateNormal = 0.25; // capped under New Regime
+        } else {
+          if (totalIncome > 50000000) {
+            rateNormal = 0.37;
+          } else {
+            rateNormal = 0.25;
+          }
+        }
+      }
+
+      let surcharge = (normalTax * rateNormal) + (specialTax * rateSpecial);
+      let rateStr = `${rateNormal * 100}%` + (rateNormal !== rateSpecial ? ` (Capped special: 15%)` : '');
+
+      const thresholds = [5000000, 10000000, 20000000];
+      if (regime === 'old') thresholds.push(50000000);
+      
+      let threshold = 5000000;
+      for (let t of thresholds) {
+        if (totalIncome > t) {
+          threshold = t;
+        }
+      }
+
+      const ratio = threshold / totalIncome;
+      const mockResult = mockCalculator(ratio);
+      
+      const mockBasicTax = mockResult.basicTax;
+      const mockSpecialTax = mockResult.specialTax;
+      const mockNormalTax = Math.max(0, mockBasicTax - mockSpecialTax);
+      
+      let mockRateNormal = 0;
+      let mockRateSpecial = 0.15;
+      if (threshold <= 5000000) {
+        mockRateNormal = 0;
+        mockRateSpecial = 0;
+      } else if (threshold <= 10000000) {
+        mockRateNormal = 0.10;
+        mockRateSpecial = 0.10;
+      } else if (threshold <= 20000000) {
+        mockRateNormal = 0.15;
+        mockRateSpecial = 0.15;
+      } else {
+        mockRateSpecial = 0.15;
+        mockRateNormal = (regime === 'new') ? 0.25 : (threshold > 50000000 ? 0.37 : 0.25);
+      }
+      
+      const mockSurcharge = (mockNormalTax * mockRateNormal) + (mockSpecialTax * mockRateSpecial);
+      const maxSurcharge = Math.max(0, (mockBasicTax + mockSurcharge) + (totalIncome - threshold) - basicTax);
+      
+      if (surcharge > maxSurcharge) {
+        const relief = surcharge - maxSurcharge;
+        return {
+          surcharge: maxSurcharge,
+          relief: relief,
+          rate: rateStr + ` (Marginal Relief applied)`
+        };
+      }
+      
+      return { surcharge, relief: 0, rate: rateStr };
+    }
+
+    // MAIN REACTIVE TAX CALCULATION ENGINE
+    function triggerCalculation() {
+      const isSalaried = (currentEmploymentType === 'salaried');
+      const category = document.getElementById('taxpayerCategory').value;
+      
+      // Salary Inputs
+      const salBasic = getInputValue('salBasic');
+      const salDa = getInputValue('salDa');
+      const salHra = getInputValue('salHra');
+      const salOtherAll = getInputValue('salOtherAll');
+      const salPerq = getInputValue('salPerq');
+      
+      const salExHra = getInputValue('salExHra');
+      const salExOther = getInputValue('salExOther');
+      const salProfTax = getInputValue('salProfTax');
+
+      // Calculate Gross Salary subtotal in real-time
+      const grossSalary = salBasic + salDa + salHra + salOtherAll + salPerq;
+      document.getElementById('txt-gross-subtotal').textContent = formatCurrency(grossSalary);
+      
+      // Other heads
+      const hpRent = getInputValue('hpRent');
+      const hpTaxes = getInputValue('hpTaxes');
+      const hpInterest = getInputValue('hpInterest');
+      
+      const pgbpIncome = getInputValue('pgbpIncome');
+      
+      const stcg111a = getInputValue('stcg111a');
+      const stcgSlab = getInputValue('stcgSlab');
+      const ltcg112a = getInputValue('ltcg112a');
+      const ltcgOther = getInputValue('ltcgOther');
+      
+      const ifosSavings = getInputValue('ifosSavings');
+      const ifosFd = getInputValue('ifosFd');
+      const ifosDividend = getInputValue('ifosDividend');
+      const ifosOther = getInputValue('ifosOther');
+      
+      const ded80C = getInputValue('ded80C');
+      const ded80D = getInputValue('ded80D');
+      const ded80CCD2 = getInputValue('ded80CCD2');
+      const dedOther = getInputValue('dedOther');
+
+      // Adjust Dynamic Cap Label for 80D
+      const lbl80dCap = document.getElementById('lbl-80d-cap');
+      let cap80d = 75000;
+      if (category !== 'regular') {
+        cap80d = 100000;
+        lbl80dCap.textContent = "Dynamic Cap: 100k";
+      } else {
+        lbl80dCap.textContent = "Dynamic Cap: 75k";
+      }
+
+      // Savings interest capping (80TTA / 80TTB)
+      let ttaTtbDeduction = 0;
+      const lblTtaTtb = document.getElementById('lbl-tta-ttb');
+      const descTtaTtb = document.getElementById('desc-tta-ttb');
+      
+      if (category === 'regular') {
+        lblTtaTtb.textContent = "80TTA";
+        descTtaTtb.textContent = "Capped at ₹10,000. Interest on Savings accounts only.";
+        ttaTtbDeduction = Math.min(10000, ifosSavings);
+      } else {
+        lblTtaTtb.textContent = "80TTB";
+        descTtaTtb.textContent = "Capped at ₹50,000. Combined Interest on Savings and FDs.";
+        ttaTtbDeduction = Math.min(50000, ifosSavings + ifosFd);
+      }
+      document.getElementById('txt-ded-tta-ttb').textContent = formatCurrency(ttaTtbDeduction);
+
+      // House Property Income Auto Deductions
+      let hpOldNet = 0;
+      let hpNewNet = 0;
+      let stat30DeductionVal = 0;
+      
+      if (currentHPType === 'letout') {
+        const nav = Math.max(0, hpRent - hpTaxes);
+        stat30DeductionVal = nav * 0.30;
+        document.getElementById('txt-hp-stat-ded').textContent = formatCurrency(stat30DeductionVal);
+        
+        hpOldNet = nav - stat30DeductionVal - hpInterest;
+        hpNewNet = nav - stat30DeductionVal - hpInterest;
+      } else {
+        hpOldNet = -Math.min(hpInterest, 200000);
+        hpNewNet = 0;
+      }
+
+      // REGIME SIMULATOR FUNCTION
+      function computeRegimeTax(regime, scaleRatio = 1.0) {
+        const sSalBasic = salBasic * scaleRatio;
+        const sSalDa = salDa * scaleRatio;
+        const sSalHra = salHra * scaleRatio;
+        const sSalOtherAll = salOtherAll * scaleRatio;
+        const sSalPerq = salPerq * scaleRatio;
+        
+        const sSalExHra = salExHra * scaleRatio;
+        const sSalExOther = salExOther * scaleRatio;
+        const sSalProfTax = salProfTax * scaleRatio;
+        
+        const sGrossSalary = sSalBasic + sSalDa + sSalHra + sSalOtherAll + sSalPerq;
+
+        const sHpOldNet = hpOldNet * scaleRatio;
+        const sHpNewNet = hpNewNet * scaleRatio;
+        const sPgbpIncome = pgbpIncome * scaleRatio;
+        
+        const sStcg111a = stcg111a * scaleRatio;
+        const sStcgSlab = stcgSlab * scaleRatio;
+        const sLtcg112a = ltcg112a * scaleRatio;
+        const sLtcgOther = ltcgOther * scaleRatio;
+        
+        const sIfosSavings = ifosSavings * scaleRatio;
+        const sIfosFd = ifosFd * scaleRatio;
+        const sIfosDividend = ifosDividend * scaleRatio;
+        const sIfosOther = ifosOther * scaleRatio;
+        
+        const sDed80C = ded80C * scaleRatio;
+        const sDed80D = ded80D * scaleRatio;
+        const sDed80CCD2 = ded80CCD2 * scaleRatio;
+        const sDedOther = dedOther * scaleRatio;
+        const sTtaTtbDeduction = ttaTtbDeduction * scaleRatio;
+
+        // Salary Head Calculations
+        let stdDed = 0;
+        let salaryExempt = 0;
+        let profTax = 0;
+        if (regime === 'old') {
+          stdDed = isSalaried ? 50000 : 0;
+          salaryExempt = isSalaried ? (sSalExHra + sSalExOther) : 0;
+          profTax = isSalaried ? sSalProfTax : 0;
+        } else {
+          stdDed = isSalaried ? 75000 : 0;
+          salaryExempt = 0;
+          profTax = 0;
+        }
+        const salIncome = Math.max(0, sGrossSalary - salaryExempt - stdDed - profTax);
+
+        // House Property setoffs
+        let hpIncome = 0;
+        if (regime === 'old') {
+          hpIncome = sHpOldNet;
+        } else {
+          hpIncome = Math.max(0, sHpNewNet); // HP loss set-off disallowed in New Regime
+        }
+
+        const ifosIncome = sIfosSavings + sIfosFd + sIfosDividend + sIfosOther;
+
+        // Normal & Special Income pools
+        let grossNormal = salIncome + sPgbpIncome + sStcgSlab + ifosIncome;
+        if (regime === 'old') {
+          if (hpIncome < 0) {
+            grossNormal += Math.max(hpIncome, -200000);
+          } else {
+            grossNormal += hpIncome;
+          }
+        } else {
+          grossNormal += hpIncome;
+        }
+
+        const grossSpecial = sStcg111a + sLtcg112a + sLtcgOther;
+        const gti = Math.max(0, grossNormal) + grossSpecial;
+
+        // Chapter VI-A Deductions
+        let allowedDeductions = 0;
+        let dedCCD2 = Math.min(sDed80CCD2, isSalaried ? (sGrossSalary * 0.10) : 0);
+        
+        if (regime === 'old') {
+          let c80 = Math.min(sDed80C, 150000);
+          let d80 = Math.min(sDed80D, cap80d);
+          let otherDeds = sDedOther + sTtaTtbDeduction + dedCCD2;
+          
+          let totalDedsProposed = c80 + d80 + otherDeds;
+          allowedDeductions = Math.min(totalDedsProposed, Math.max(0, grossNormal));
+        } else {
+          allowedDeductions = Math.min(dedCCD2, Math.max(0, grossNormal));
+        }
+
+        const netNormal = Math.max(0, grossNormal - allowedDeductions);
+        const nti = netNormal + grossSpecial;
+
+        // Slabs tax computation
+        const slabs = (regime === 'new') ? slabsNew : getOldRegimeSlabs(category);
+        const basicExemption = slabs[0].max;
+        
+        let unexhaustedExemption = 0;
+        let normalTaxResult = { tax: 0, breakup: [] };
+        
+        if (netNormal >= basicExemption) {
+          normalTaxResult = calculateNormalTax(netNormal, slabs);
+        } else {
+          normalTaxResult = {
+            tax: 0,
+            breakup: slabs.map(s => ({ min: s.min, max: s.max, rate: s.rate, taxable: 0, tax: 0 }))
+          };
+          unexhaustedExemption = basicExemption - netNormal;
+        }
+
+        const specTaxResult = calculateSpecialGainsTax(sStcg111a, sLtcg112a, sLtcgOther, unexhaustedExemption);
+        const basicTaxBeforeRebate = normalTaxResult.tax + specTaxResult.taxLtcgOther + specTaxResult.taxLtcg112a + specTaxResult.taxStcg111a;
+        const specialTaxPortion = specTaxResult.taxLtcgOther + specTaxResult.taxLtcg112a + specTaxResult.taxStcg111a;
+
+        // Section 87A Rebate
+        let rebate87A = 0;
+        if (regime === 'old') {
+          if (nti <= 500000) {
+            rebate87A = Math.min(12500, basicTaxBeforeRebate - specTaxResult.taxLtcg112a);
+          }
+        } else {
+          if (nti <= 1200000) {
+            rebate87A = Math.max(0, basicTaxBeforeRebate - specTaxResult.taxLtcg112a);
+          } else {
+            const excessIncome = nti - 1200000;
+            const eligibleTax = basicTaxBeforeRebate - specTaxResult.taxLtcg112a;
+            if (eligibleTax > excessIncome) {
+              rebate87A = eligibleTax - excessIncome;
+            }
+          }
+        }
+
+        const basicTaxAfterRebate = Math.max(0, basicTaxBeforeRebate - rebate87A);
+
+        return {
+          gti,
+          deductions: allowedDeductions + (regime === 'old' ? (isSalaried ? 50000 : 0) + salaryExempt + profTax : (isSalaried ? 75000 : 0)),
+          nti,
+          basicTax: basicTaxAfterRebate,
+          specialTax: specialTaxPortion,
+          unadjustedBasicTax: basicTaxBeforeRebate,
+          rebate: rebate87A,
+          normalTaxBreakup: normalTaxResult.breakup,
+          specTaxDetails: specTaxResult,
+          
+          // Print itemizations
+          salIncomeHead: salIncome,
+          exemptionsHead: salaryExempt + profTax,
+          hpIncomeHead: hpIncome,
+          pgbpIncomeHead: sPgbpIncome,
+          cgIncomeHead: grossSpecial,
+          ifosIncomeHead: ifosIncome,
+          deductionsChapterVIA: allowedDeductions,
+          stdDeductionValue: stdDed
+        };
+      }
+
+      // Compute Old vs New
+      const oldRegOutput = computeRegimeTax('old');
+      const newRegOutput = computeRegimeTax('new');
+
+      // Surcharge computations
+      const oldSurcharge = computeSurcharge('old', oldRegOutput.nti, oldRegOutput.basicTax, oldRegOutput.specialTax, category, (ratio) => computeRegimeTax('old', ratio));
+      const newSurcharge = computeSurcharge('new', newRegOutput.nti, newRegOutput.basicTax, newRegOutput.specialTax, category, (ratio) => computeRegimeTax('new', ratio));
+
+      // Cess (4%)
+      const oldCessVal = (oldRegOutput.basicTax + oldSurcharge.surcharge) * 0.04;
+      const newCessVal = (newRegOutput.basicTax + newSurcharge.surcharge) * 0.04;
+
+      // Final Payable
+      const oldPayable = oldRegOutput.basicTax + oldSurcharge.surcharge + oldCessVal;
+      const newPayable = newRegOutput.basicTax + newSurcharge.surcharge + newCessVal;
+
+      // ----------------------------------------------------
+      // UPDATE COMPARATIVE SCREEN DASHBOARD
+      // ----------------------------------------------------
+      document.getElementById('lbl-gti-old').textContent = formatCurrency(oldRegOutput.gti);
+      document.getElementById('lbl-ded-old').textContent = formatCurrency(oldRegOutput.gti - oldRegOutput.nti);
+      document.getElementById('lbl-nti-old').textContent = formatCurrency(oldRegOutput.nti);
+      document.getElementById('lbl-basictax-old').textContent = formatCurrency(oldRegOutput.unadjustedBasicTax);
+      document.getElementById('lbl-rebate-old').textContent = `- ${formatCurrency(oldRegOutput.rebate)}`;
+      document.getElementById('lbl-surcharge-old').textContent = formatCurrency(oldSurcharge.surcharge);
+      document.getElementById('lbl-cess-old').textContent = formatCurrency(oldCessVal);
+      document.getElementById('lbl-payable-old').textContent = formatCurrency(oldPayable);
+
+      document.getElementById('lbl-gti-new').textContent = formatCurrency(newRegOutput.gti);
+      document.getElementById('lbl-ded-new').textContent = formatCurrency(newRegOutput.gti - newRegOutput.nti);
+      document.getElementById('lbl-nti-new').textContent = formatCurrency(newRegOutput.nti);
+      document.getElementById('lbl-basictax-new').textContent = formatCurrency(newRegOutput.unadjustedBasicTax);
+      document.getElementById('lbl-rebate-new').textContent = `- ${formatCurrency(newRegOutput.rebate)}`;
+      document.getElementById('lbl-surcharge-new').textContent = formatCurrency(newSurcharge.surcharge);
+      document.getElementById('lbl-cess-new').textContent = formatCurrency(newCessVal);
+      document.getElementById('lbl-payable-new').textContent = formatCurrency(newPayable);
+
+      // Dynamic recommendation banner update
+      const recommendationBanner = document.getElementById('recommendation-banner');
+      const recTitle = document.getElementById('txt-recommendation-title');
+      const recDesc = document.getElementById('txt-recommendation-desc');
+      const taxDifference = Math.abs(oldPayable - newPayable);
+      
+      const hasIncome = (grossSalary + hpRent + pgbpIncome + stcg111a + stcgSlab + ltcg112a + ltcgOther + ifosSavings + ifosFd + ifosDividend + ifosOther) > 0;
+      
+      if (!hasIncome) {
+        recommendationBanner.className = "bg-gradient-to-br from-slate-600 to-slate-800 text-white rounded-2xl p-5 shadow-md flex items-center gap-4 border border-slate-500/20";
+        recTitle.innerHTML = "No Income Declared";
+        recDesc.textContent = "Provide financial details across tabs to see recommended tax regime.";
+      } else if (Math.round(oldPayable) === Math.round(newPayable)) {
+        recommendationBanner.className = "bg-gradient-to-br from-indigo-600 to-indigo-800 text-white rounded-2xl p-5 shadow-md flex items-center gap-4 border border-indigo-500/20";
+        recTitle.innerHTML = "Equal Tax Liability";
+        recDesc.textContent = "Both regimes yield equal tax outflow. New Regime is the standard default.";
+      } else if (newPayable < oldPayable) {
+        recommendationBanner.className = "bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl p-5 shadow-md flex items-center gap-4 border border-emerald-500/20";
+        recTitle.innerHTML = `New Regime is better! <span class="bg-white/20 text-xs px-2 py-0.5 rounded ml-2">Saves: ${formatCurrency(taxDifference)}</span>`;
+        recDesc.textContent = `New Regime saves you ${formatCurrency(taxDifference)} in final tax liabilities.`;
+      } else {
+        recommendationBanner.className = "bg-gradient-to-br from-indigo-600 to-blue-700 text-white rounded-2xl p-5 shadow-md flex items-center gap-4 border border-indigo-500/20";
+        recTitle.innerHTML = `Old Regime is better! <span class="bg-white/20 text-xs px-2 py-0.5 rounded ml-2">Saves: ${formatCurrency(taxDifference)}</span>`;
+        recDesc.textContent = `Based on deductions, the Old Regime saves you ${formatCurrency(taxDifference)} in tax liabilities.`;
+      }
+
+      // Slabs Modal breakdown updates
+      let ageTitle = "Old Regime (Resident < 60 Years)";
+      if (category === 'senior') ageTitle = "Old Regime (Senior Citizen 60-80)";
+      if (category === 'super_senior') ageTitle = "Old Regime (Super Senior > 80)";
+      document.getElementById('modal-old-title').textContent = ageTitle;
+
+      const oldSlabsContainer = document.getElementById('modal-old-slabs');
+      oldSlabsContainer.innerHTML = '';
+      oldRegOutput.normalTaxBreakup.forEach(b => {
+        let label = `${formatCurrency(b.min)} to ${b.max === Infinity ? 'Above' : formatCurrency(b.max)}`;
+        let rateText = `${(b.rate * 100).toFixed(0)}%`;
+        let slabDiv = document.createElement('div');
+        slabDiv.className = "flex justify-between items-center p-2 text-xs rounded border border-slate-100 bg-white shadow-sm";
+        slabDiv.innerHTML = `
+          <div>
+            <span class="font-semibold block text-slate-800">${label}</span>
+            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Rate: ${rateText} | Taxable: ${formatCurrency(b.taxable)}</span>
+          </div>
+          <span class="font-bold text-slate-700">${formatCurrency(b.tax)}</span>
+        `;
+        oldSlabsContainer.appendChild(slabDiv);
+      });
+      document.getElementById('modal-old-total-normal').textContent = formatCurrency(oldRegOutput.normalTaxBreakup.reduce((a, b) => a + b.tax, 0));
+
+      const newSlabsContainer = document.getElementById('modal-new-slabs');
+      newSlabsContainer.innerHTML = '';
+      newRegOutput.normalTaxBreakup.forEach(b => {
+        let label = `${formatCurrency(b.min)} to ${b.max === Infinity ? 'Above' : formatCurrency(b.max)}`;
+        let rateText = `${(b.rate * 100).toFixed(0)}%`;
+        let slabDiv = document.createElement('div');
+        slabDiv.className = "flex justify-between items-center p-2 text-xs rounded border border-indigo-50 bg-indigo-50/10 shadow-sm";
+        slabDiv.innerHTML = `
+          <div>
+            <span class="font-semibold block text-indigo-950">${label}</span>
+            <span class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Rate: ${rateText} | Taxable: ${formatCurrency(b.taxable)}</span>
+          </div>
+          <span class="font-bold text-indigo-900">${formatCurrency(b.tax)}</span>
+        `;
+        newSlabsContainer.appendChild(slabDiv);
+      });
+      document.getElementById('modal-new-total-normal').textContent = formatCurrency(newRegOutput.normalTaxBreakup.reduce((a, b) => a + b.tax, 0));
+
+      // Inject Special Capital Gains details in Modal
+      const specTableBody = document.getElementById('modal-special-table-body');
+      specTableBody.innerHTML = '';
+      const specialGainsData = [
+        { name: 'STCG u/s 111A (Equity)', val: stcg111a, rate: '20%', oldTax: oldRegOutput.specTaxDetails.taxStcg111a, newTax: newRegOutput.specTaxDetails.taxStcg111a },
+        { name: 'LTCG u/s 112A (Equity)', val: ltcg112a, rate: '12.5% (exemption 1.25L)', oldTax: oldRegOutput.specTaxDetails.taxLtcg112a, newTax: newRegOutput.specTaxDetails.taxLtcg112a },
+        { name: 'Other LTCG (Property)', val: ltcgOther, rate: '12.5%', oldTax: oldRegOutput.specTaxDetails.taxLtcgOther, newTax: newRegOutput.specTaxDetails.taxLtcgOther }
+      ];
+      specialGainsData.forEach(row => {
+        let tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-semibold text-slate-800">${row.name}</td>
+          <td class="px-4 py-3 text-slate-600">${formatCurrency(row.val)}</td>
+          <td class="px-4 py-3 font-medium text-indigo-700">${row.rate}</td>
+          <td class="px-4 py-3 text-right font-semibold text-slate-700">${formatCurrency(row.oldTax)}</td>
+          <td class="px-4 py-3 text-right font-semibold text-indigo-900">${formatCurrency(row.newTax)}</td>
+        `;
+        specTableBody.appendChild(tr);
+      });
+
+      // ----------------------------------------------------
+      // BIND PDF PRINT DATA DYNAMICALLY
+      // ----------------------------------------------------
+      const taxpayerName = document.getElementById('taxpayerName').value.trim() || 'N/A';
+      const taxpayerPan = document.getElementById('taxpayerPan').value.trim() || 'N/A';
+      const taxpayerMobile = document.getElementById('taxpayerMobile').value.trim() || 'N/A';
+      const taxpayerEmail = document.getElementById('taxpayerEmail').value.trim() || 'N/A';
+      
+      let catText = "Resident Individual (< 60)";
+      if (category === 'senior') catText = "Senior Citizen (60 - 80)";
+      if (category === 'super_senior') catText = "Super Senior Citizen (> 80)";
+      
+      document.getElementById('print-taxpayer-name').textContent = taxpayerName;
+      document.getElementById('print-taxpayer-pan').textContent = taxpayerPan;
+      document.getElementById('print-taxpayer-mobile').textContent = taxpayerMobile;
+      document.getElementById('print-taxpayer-email').textContent = taxpayerEmail;
+      document.getElementById('print-taxpayer-cat').textContent = catText;
+      document.getElementById('print-taxpayer-date').textContent = new Date().toLocaleDateString('en-IN') + ' ' + new Date().toLocaleTimeString('en-IN');
+
+      // Salary table mapping
+      document.getElementById('p-sal-old').textContent = formatCurrency(grossSalary);
+      document.getElementById('p-sal-new').textContent = formatCurrency(grossSalary);
+      
+      document.getElementById('p-sal-basic-old').textContent = formatCurrency(salBasic);
+      document.getElementById('p-sal-basic-new').textContent = formatCurrency(salBasic);
+      document.getElementById('p-sal-da-old').textContent = formatCurrency(salDa);
+      document.getElementById('p-sal-da-new').textContent = formatCurrency(salDa);
+      document.getElementById('p-sal-hra-old').textContent = formatCurrency(salHra);
+      document.getElementById('p-sal-hra-new').textContent = formatCurrency(salHra);
+      document.getElementById('p-sal-otherall-old').textContent = formatCurrency(salOtherAll);
+      document.getElementById('p-sal-otherall-new').textContent = formatCurrency(salOtherAll);
+      document.getElementById('p-sal-perq-old').textContent = formatCurrency(salPerq);
+      document.getElementById('p-sal-perq-new').textContent = formatCurrency(salPerq);
+      
+      document.getElementById('p-sal-ex-old').textContent = formatCurrency(oldRegOutput.exemptionsHead);
+      document.getElementById('p-sal-sd-old').textContent = formatCurrency(oldRegOutput.stdDeductionValue);
+      document.getElementById('p-sal-sd-new').textContent = formatCurrency(newRegOutput.stdDeductionValue);
+
+      // Heads
+      document.getElementById('p-hp-old').textContent = formatCurrency(oldRegOutput.hpIncomeHead);
+      document.getElementById('p-hp-new').textContent = formatCurrency(newRegOutput.hpIncomeHead);
+      document.getElementById('p-pgbp-old').textContent = formatCurrency(oldRegOutput.pgbpIncomeHead);
+      document.getElementById('p-pgbp-new').textContent = formatCurrency(newRegOutput.pgbpIncomeHead);
+      document.getElementById('p-cg-old').textContent = formatCurrency(oldRegOutput.cgIncomeHead);
+      document.getElementById('p-cg-new').textContent = formatCurrency(newRegOutput.cgIncomeHead);
+      document.getElementById('p-ifos-old').textContent = formatCurrency(oldRegOutput.ifosIncomeHead);
+      document.getElementById('p-ifos-new').textContent = formatCurrency(newRegOutput.ifosIncomeHead);
+
+      // Subtotals
+      document.getElementById('p-gti-old').textContent = formatCurrency(oldRegOutput.gti);
+      document.getElementById('p-gti-new').textContent = formatCurrency(newRegOutput.gti);
+      document.getElementById('p-ded-old').textContent = formatCurrency(oldRegOutput.deductionsChapterVIA);
+      document.getElementById('p-ded-new').textContent = formatCurrency(newRegOutput.deductionsChapterVIA);
+      document.getElementById('p-nti-old').textContent = formatCurrency(oldRegOutput.nti);
+      document.getElementById('p-nti-new').textContent = formatCurrency(newRegOutput.nti);
+
+      // Net Tax
+      document.getElementById('p-tax-basic-old').textContent = formatCurrency(oldRegOutput.unadjustedBasicTax);
+      document.getElementById('p-tax-basic-new').textContent = formatCurrency(newRegOutput.unadjustedBasicTax);
+      document.getElementById('p-tax-rebate-old').textContent = formatCurrency(oldRegOutput.rebate);
+      document.getElementById('p-tax-rebate-new').textContent = formatCurrency(newRegOutput.rebate);
+      document.getElementById('p-tax-surcharge-old').textContent = formatCurrency(oldSurcharge.surcharge);
+      document.getElementById('p-tax-surcharge-new').textContent = formatCurrency(newSurcharge.surcharge);
+      document.getElementById('p-tax-cess-old').textContent = formatCurrency(oldCessVal);
+      document.getElementById('p-tax-cess-new').textContent = formatCurrency(newCessVal);
+      
+      document.getElementById('p-tax-payable-old').textContent = formatCurrency(oldPayable);
+      document.getElementById('p-tax-payable-new').textContent = formatCurrency(newPayable);
+
+      // Recommendations in Print
+      const recTextElement = document.getElementById('p-rec-text');
+      if (Math.round(oldPayable) === Math.round(newPayable)) {
+        recTextElement.innerHTML = `Calculation suggests both regimes result in equal tax outgoings (${formatCurrency(newPayable)}). The default New Tax Regime u/s 115BAC is recommended for compliance convenience.`;
+      } else if (newPayable < oldPayable) {
+        recTextElement.innerHTML = `CA ADVISORY: The <strong>New Tax Regime u/s 115BAC</strong> is more beneficial for the taxpayer. Choosing the New Regime results in total savings of <strong>${formatCurrency(taxDifference)}</strong>. Taxpayer is advised to declare and submit returns under the New regime.`;
+      } else {
+        recTextElement.innerHTML = `CA ADVISORY: The <strong>Old Tax Regime</strong> is more beneficial for the taxpayer. Choosing the Old Regime results in total savings of <strong>${formatCurrency(taxDifference)}</strong>. Taxpayer must declare deductions (80C, 80D, HRA etc.) to validate this benefit at filing.`;
+      }
+    }
+
+    // PDF Printer Trigger
+    function generatePDF() {
+      // Validate Name
+      const name = document.getElementById('taxpayerName').value.trim();
+      if (!name) {
+        alert("Please enter the Taxpayer's Name in the 'Profile Details' tab to customize the report.");
+        switchTab('tab-general');
+        document.getElementById('taxpayerName').focus();
+        return;
+      }
+      
+      // Update data and open print window
+      triggerCalculation();
+      window.print();
+    }
+
+    // Modal Control Handler
+    function toggleModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    window.onload = function() {
+      lucide.createIcons();
+      // Initialize with zero amounts
+      resetInputs();
+    };
+  </script>
+</body>
+</html>
